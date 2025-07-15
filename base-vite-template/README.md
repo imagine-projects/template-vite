@@ -1,0 +1,1 @@
+# Vite Base Template
