@@ -13,7 +13,7 @@ export default defineConfig(() => ({
   },
   server: {
     host: "::",
-    port: 5173,
+    port: process.env.DEV_SERVER_PORT ? parseInt(process.env.DEV_SERVER_PORT) : 3000,
   },
   plugins: [tailwindcss()],
 }));
