@@ -12,13 +12,19 @@
 	function notifyNavigationChange() {
 		post({
 			type: "navigation",
-			payload: { url: window.location.href, title: window.document.title },
+			payload: {
+				url: window.location.href,
+				title: window.document.title,
+			},
 		});
 	}
 	function notifyLoaded() {
 		post({
 			type: "loaded",
-			payload: { url: window.location.href, title: window.document.title },
+			payload: {
+				url: window.location.href,
+				title: window.document.title,
+			},
 		});
 	}
 
@@ -74,6 +80,7 @@
 		window.document.readyState === "complete" ||
 		window.document.readyState === "interactive"
 	) {
+		// DOMContentLoaded already fired
 		notifyLoaded();
 	} else {
 		window.addEventListener("DOMContentLoaded", function () {
@@ -85,5 +92,6 @@
 		notifyLoaded();
 	});
 
+	// Report initial navigation
 	notifyNavigationChange();
 })(window);
