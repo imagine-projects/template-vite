@@ -1,5 +1,6 @@
 (function (window) {
   function report({ type, payload }: { type: string; payload: object }) {
+    console.debug({ type, payload });
     window.parent.postMessage(
       {
         type,
@@ -83,7 +84,7 @@
     }
   };
 
-  ["log", "warn", "error", "debug"].forEach((method) => {
+  ["log", "warn", "error"].forEach((method) => {
     if (typeof console[method] === "function") {
       const originalMethod = console[method];
       console[method] = function (...args: unknown[]) {
@@ -155,18 +156,6 @@
   window.addEventListener("load", function () {
     notifyLoaded();
   });
-
-  if (
-    window.document.readyState === "complete" ||
-    window.document.readyState === "interactive"
-  ) {
-    // DOMContentLoaded already fired
-    notifyLoaded();
-  } else {
-    window.addEventListener("DOMContentLoaded", function () {
-      notifyLoaded();
-    });
-  }
 
   // Report initial navigation
   notifyNavigationChange();
