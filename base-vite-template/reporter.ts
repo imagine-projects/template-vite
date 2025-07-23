@@ -12,9 +12,27 @@
 	function notifyNavigationChange() {
 		post({
 			type: "navigation",
-			payload: { url: window.location.href },
+			payload: { url: window.location.href, title: window.document.title },
 		});
 	}
+	function notifyLoaded() {
+		post({
+			type: "loaded",
+			payload: { url: window.location.href, title: window.document.title },
+		});
+	}
+
+	const origPushState = window.history.pushState;
+	window.history.pushState = function (...args) {
+		origPushState.apply(this, args);
+		notifyNavigationChange();
+	};
+
+	const origReplaceState = window.history.replaceState;
+	window.history.replaceState = function (...args) {
+		origReplaceState.apply(this, args);
+		notifyNavigationChange();
+	};
 
 	window.addEventListener("popstate", notifyNavigationChange);
 	window.addEventListener("error", function (event) {
@@ -52,5 +70,20 @@
 		});
 	});
 
-	notifyNavigationChange()
+	if (
+		window.document.readyState === "complete" ||
+		window.document.readyState === "interactive"
+	) {
+		notifyLoaded();
+	} else {
+		window.addEventListener("DOMContentLoaded", function () {
+			notifyLoaded();
+		});
+	}
+
+	window.addEventListener("load", function () {
+		notifyLoaded();
+	});
+
+	notifyNavigationChange();
 })(window);
