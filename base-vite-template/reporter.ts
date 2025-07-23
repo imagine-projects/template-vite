@@ -1,6 +1,5 @@
 (function (window) {
 	function post({ type, payload }: { type: string; payload: object }) {
-		console.log({ type, payload });
 		window.parent.postMessage(
 			{
 				type,
