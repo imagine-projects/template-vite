@@ -7,7 +7,7 @@
     "build": "bunx next build",
     "start": "bunx next start",
     "lint": "bunx next lint",
-    "typecheck": "bunx tsc -b --noEmit"
+    "typecheck": "bunx tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
