@@ -5,6 +5,10 @@ import { AppwriteException } from "appwrite";
 // src/routes/_authenticated.tsx
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ location }) => {
+    if (location.pathname === "/sign-out" || location.pathname === "/configure-preview-token") {
+      return;
+    }
+
     let user: Awaited<ReturnType<typeof account.get>> | null = null;
 
     try {
