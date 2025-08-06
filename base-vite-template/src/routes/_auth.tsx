@@ -1,4 +1,4 @@
-import { account } from "@/lib/appwrite";
+import { getAccountClient } from "@/lib/appwrite";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { AppwriteException } from "appwrite";
 
@@ -8,6 +8,8 @@ export const Route = createFileRoute("/_auth")({
     if (location.pathname === "/sign-out") {
       return;
     }
+
+    const account = getAccountClient();
 
     let user: Awaited<ReturnType<typeof account.get>> | null = null;
 

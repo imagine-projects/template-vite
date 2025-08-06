@@ -1,10 +1,12 @@
-import { account } from '@/lib/appwrite'
+import { getAccountClient } from '@/lib/appwrite'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { AppwriteException } from 'appwrite';
 
 // src/routes/_authenticated.tsx
 export const Route = createFileRoute('/_protected')({
   beforeLoad: async ({ location }) => {
+    const account = getAccountClient();
+
     try {
       await account.get();
     } catch (error) {

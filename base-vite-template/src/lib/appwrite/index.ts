@@ -1,4 +1,5 @@
 import { Client, Account } from "appwrite";
+import { queryClient } from "../react-query";
 
 const endpoint = import.meta.env.VITE_APPWRITE_ENDPOINT;
 
@@ -12,13 +13,49 @@ if (!projectId) {
   throw new Error("VITE_APPWRITE_PROJECT_ID is not set");
 }
 
-const appwriteClient = new Client()
+
+const getAppwriteClient = () => {
+  const appwriteClient = new Client()
   .setEndpoint(endpoint)
   .setProject(projectId);
 
-const account = new Account(appwriteClient)
+  patchAppwriteClientWithPreviewToken(appwriteClient);
+  return appwriteClient;
+}
+
+const getAccountClient = () => {
+  const appwriteClient = getAppwriteClient();
+  return new Account(appwriteClient);
+}
 
 export {
-  appwriteClient,
-  account,
+  getAppwriteClient,
+  getAccountClient,
 };
+
+
+const getPreviewTokenFromUrl = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+  const previewToken = searchParams.get("imaginePreviewToken");
+
+  if (previewToken) {
+    localStorage.setItem("imaginePreviewToken", previewToken);
+  }
+
+  return previewToken;
+}
+
+
+const patchAppwriteClientWithPreviewToken = (appwriteClient: Client) => {
+  const previewTokenInLocalStorage = localStorage.getItem("imaginePreviewToken");
+  const previewTokenInUrl = getPreviewTokenFromUrl();
+
+  const token = previewTokenInLocalStorage || previewTokenInUrl;
+
+  if (token) {
+    appwriteClient.setJWT(token);
+    queryClient.invalidateQueries({ queryKey: ["auth", "user"] });
+  }
+
+  return appwriteClient;
+}

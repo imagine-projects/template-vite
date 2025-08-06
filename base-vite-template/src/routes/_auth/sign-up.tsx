@@ -10,7 +10,7 @@ import { AuthCard } from "@/components/auth/auth-card";
 import { AuthForm } from "@/components/auth/auth-form";
 import { AuthField } from "@/components/auth/auth-field";
 import { ID, AppwriteException } from "appwrite";
-import { account } from "@/lib/appwrite";
+import { getAccountClient } from "@/lib/appwrite";
 import { queryClient } from "@/lib/react-query";
 
 export const Route = createFileRoute("/_auth/sign-up")({
@@ -26,6 +26,8 @@ type SignUpForm = z.infer<typeof signUpSchema>;
 
 // Empty mutation function - to be implemented later
 const createUserAccount = async (data: SignUpForm) => {
+  const account = getAccountClient();
+
   try {
     const result = await account.create(ID.unique(), data.email, data.password);
     console.log("Sign up successful", result);

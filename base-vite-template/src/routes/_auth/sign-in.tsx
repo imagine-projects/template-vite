@@ -1,4 +1,4 @@
-import { account } from "@/lib/appwrite";
+import { getAccountClient } from "@/lib/appwrite";
 import { useMutation } from "@tanstack/react-query";
 import {
   createFileRoute,
@@ -26,6 +26,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 function RouteComponent() {
   const search = useSearch({ strict: false });
   const navigate = useNavigate();
+  const account = getAccountClient();
   const { mutate: login, isPending } = useMutation({
     mutationFn: (data: LoginForm) =>
       account.createEmailPasswordSession(data.email, data.password),
