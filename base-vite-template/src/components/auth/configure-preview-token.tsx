@@ -1,11 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
-export const Route = createFileRoute('/_auth/configure-preview-token')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
+export function ConfigureImaginePreviewToken({ children }: { children: React.ReactNode }) {
   const getPreviewTokenFromUrl = () => {
     const searchParams = new URLSearchParams(window.location.search);
     return searchParams.get("imaginePreviewToken");
@@ -20,8 +15,6 @@ function RouteComponent() {
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete("imaginePreviewToken");
       window.history.replaceState({}, "", newUrl.toString());
-    } else {
-      window.location.href = "/";
     }
   }
 
@@ -30,8 +23,8 @@ function RouteComponent() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      Configuring Preview Token...
-    </div>
+    <>
+      {children}
+    </>
   )
 }

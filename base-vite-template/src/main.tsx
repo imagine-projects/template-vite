@@ -7,6 +7,7 @@ import "./index.css";
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/react-query";
+import { ConfigureImaginePreviewToken } from "./components/auth/configure-preview-token";
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -30,7 +31,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <ConfigureImaginePreviewToken>
+          <App />
+        </ConfigureImaginePreviewToken>
       </QueryClientProvider>
     </StrictMode>
   );

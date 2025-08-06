@@ -12,6 +12,8 @@ export function useAuth() {
   });
 
   const deleteSession = async () => {
+    localStorage.removeItem("imaginePreviewToken");
+    
     try {
       await account.deleteSession("current");
     } catch (error) {
