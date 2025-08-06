@@ -1,6 +1,6 @@
-import { RouterContext } from '@/main';
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { RouterContext } from "@/main";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   beforeLoad: async ({ location }) => {
@@ -9,7 +9,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <>
       <Outlet />
-      <TanStackRouterDevtools />
+      {import.meta.env.VITE_HIDE_DEVTOOLS !== "true" && (
+        <TanStackRouterDevtools />
+      )}
     </>
   ),
-})
+});
