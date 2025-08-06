@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useForm, UseFormReturn, FieldValues, SubmitHandler } from "react-hook-form";
+import { useForm, UseFormReturn, FieldValues, DefaultValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Form } from "@/components/ui/form";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: z.ZodSchema<T>;
-  defaultValues: T;
+  defaultValues: DefaultValues<T>;
   onSubmit: (data: T, form: UseFormReturn<T>) => void;
   children: (form: UseFormReturn<T>) => React.ReactNode;
   submitText: string;
