@@ -17,6 +17,7 @@ export default defineConfig({
     host: "::",
     allowedHosts: true,
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+    hmr: process.env.DISABLE_HMR === 'true' ? false : true,
   },
   plugins: [tanstackRouter({
     target: 'react',
