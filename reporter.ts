@@ -64,6 +64,15 @@
     isMultiSelect?: boolean;
   }
 
+
+  function isWhitelistedOrigin(origin: string) {
+    if (CONFIG.ALLOWED_ORIGINS.includes("*")) {
+      return true;
+    }
+
+    return CONFIG.ALLOWED_ORIGINS.includes(origin);
+  }
+
   const CONFIG = {
     HIGHLIGHT_COLOR: "#0da2e7",
     HIGHLIGHT_BG: "#0da2e71a",
@@ -197,7 +206,7 @@
         console.log(
           `[Console Capture] Network request to ${
             args[0] || response.url
-          }, status: ${response.status}`,
+          }, status: ${response.status}`
         );
 
         const requestData: NetworkRequestData = {
@@ -415,14 +424,14 @@
     value: unknown,
     options: Partial<SerializerConfig> = {},
     seen = new WeakMap<object, string>(),
-    path = "root",
+    path = "root"
   ): unknown {
     const config: SerializerConfig = { ...SERIALIZER_CONFIG, ...options };
 
     if (path.split(".").length > config.maxDepth) {
       return new SerializedType(
         "MaxDepthReached",
-        `[Max depth of ${config.maxDepth} reached]`,
+        `[Max depth of ${config.maxDepth} reached]`
       );
     }
 
@@ -435,7 +444,7 @@
             "String",
             `${value.slice(0, config.maxStringLength)}... [${
               value.length - config.maxStringLength
-            } more characters]`,
+            } more characters]`
           )
         : value;
     }
@@ -475,7 +484,7 @@
             (value as unknown as Record<string, unknown>)[prop],
             config,
             seen,
-            `${path}.${prop}`,
+            `${path}.${prop}`
           );
         }
       }
@@ -501,7 +510,7 @@
     if (value instanceof WeakMap || value instanceof WeakSet) {
       return new SerializedType(
         value.constructor.name,
-        `[${value.constructor.name}]`,
+        `[${value.constructor.name}]`
       );
     }
     if (value instanceof Set) {
@@ -511,14 +520,14 @@
           values: setValues
             .slice(0, config.maxArrayLength)
             .map((item, index) =>
-              serializeValue(item, config, seen, `${path}.Set[${index}]`),
+              serializeValue(item, config, seen, `${path}.Set[${index}]`)
             ),
           truncated: setValues.length - config.maxArrayLength,
         });
       } else {
         return new SerializedType("Set", {
           values: setValues.map((item, index) =>
-            serializeValue(item, config, seen, `${path}.Set[${index}]`),
+            serializeValue(item, config, seen, `${path}.Set[${index}]`)
           ),
         });
       }
@@ -535,14 +544,14 @@
         const keyStr =
           typeof key === "object"
             ? JSON.stringify(
-                serializeValue(key, config, seen, `${path}.MapKey`),
+                serializeValue(key, config, seen, `${path}.MapKey`)
               )
             : String(key);
         mapEntries[keyStr] = serializeValue(
           val,
           config,
           seen,
-          `${path}.Map[${keyStr}]`,
+          `${path}.Map[${keyStr}]`
         );
         keysCount++;
       }
@@ -564,12 +573,12 @@
         return value
           .slice(0, config.maxArrayLength)
           .map((item, index) =>
-            serializeValue(item, config, seen, `${path}[${index}]`),
+            serializeValue(item, config, seen, `${path}[${index}]`)
           )
           .concat([`... ${value.length - config.maxArrayLength} more items`]);
       } else {
         return value.map((item, index) =>
-          serializeValue(item, config, seen, `${path}[${index}]`),
+          serializeValue(item, config, seen, `${path}[${index}]`)
         );
       }
     }
@@ -577,7 +586,7 @@
     const keys = [...Object.getOwnPropertyNames(value)];
     if (config.includeSymbols) {
       keys.push(
-        ...Object.getOwnPropertySymbols(value).map((sym) => sym.toString()),
+        ...Object.getOwnPropertySymbols(value).map((sym) => sym.toString())
       );
     }
     keys.slice(0, config.maxObjectKeys).forEach((key) => {
@@ -586,12 +595,12 @@
           (value as Record<string, unknown>)[key],
           config,
           seen,
-          `${path}.${key}`,
+          `${path}.${key}`
         );
       } catch (error) {
         objectResult[key] = new SerializedType(
           "Error",
-          `[Unable to serialize: ${error instanceof Error ? error.message : "Unknown error"}]`,
+          `[Unable to serialize: ${error instanceof Error ? error.message : "Unknown error"}]`
         );
       }
     });
@@ -643,12 +652,12 @@
               maxDepth: 5,
               includeSymbols: true,
               preserveTypes: true,
-            }),
+            })
           );
           const message =
             serializedArgs
               .map((arg) =>
-                typeof arg === "string" ? arg : JSON.stringify(arg, null, 2),
+                typeof arg === "string" ? arg : JSON.stringify(arg, null, 2)
               )
               .join(" ") + (additionalStack ? "\n" + additionalStack : "");
           sendMessageToAllowedOrigins({
@@ -681,7 +690,7 @@
           acc[attr.name] = attr.value;
           return acc;
         },
-        {},
+        {}
       ),
       tagName: element.tagName,
       data: serializeElementData(element),
@@ -752,7 +761,7 @@
           });
         }
       },
-      { passive: true },
+      { passive: true }
     );
   }
 
@@ -823,7 +832,7 @@
       .filter(
         (child): child is Element =>
           isSelectableElement(child) &&
-          getElementLocation(child).filePath !== filePath,
+          getElementLocation(child).filePath !== filePath
       )
       .filter(
         (child, index, self) =>
@@ -831,8 +840,8 @@
           self.findIndex(
             (el) =>
               getElementLocation(el).filePath ===
-              getElementLocation(child).filePath,
-          ),
+              getElementLocation(child).filePath
+          )
       )
       .map(
         (child): SerializedElementData => ({
@@ -847,7 +856,7 @@
           textContent: (child as HTMLElement).innerText,
           attrs: { src: child.getAttribute("src") || "" },
           children: [],
-        }),
+        })
       );
 
     return {
@@ -893,7 +902,7 @@
      */
     function debounce<T extends unknown[]>(
       fn: (...args: T) => void,
-      delay: number,
+      delay: number
     ): (...args: T) => void {
       let timeoutId: number | null = null;
       return (...args: T) => {
@@ -1052,7 +1061,7 @@
       }
       if (selectorState.hoveredElement) {
         findElementsByLocation(
-          getElementLocation(selectorState.hoveredElement),
+          getElementLocation(selectorState.hoveredElement)
         ).forEach((el) => {
           if (!el.classList.contains("imagine-selected-element")) {
             removeHoveredHighlight(el);
@@ -1061,7 +1070,7 @@
       }
       selectorState.hoveredElement = target;
       const relatedElements = findElementsByLocation(
-        getElementLocation(selectorState.hoveredElement),
+        getElementLocation(selectorState.hoveredElement)
       );
       if (relatedElements) {
         relatedElements.forEach((el) => {
@@ -1081,7 +1090,7 @@
       if (selectorState.isActive) {
         if (selectorState.hoveredElement) {
           const relatedElements = findElementsByLocation(
-            getElementLocation(selectorState.hoveredElement),
+            getElementLocation(selectorState.hoveredElement)
           );
           if (relatedElements) {
             relatedElements.forEach((el) => {
@@ -1116,7 +1125,7 @@
       if (
         selectorState.hoveredElement &&
         !selectorState.hoveredElement.classList.contains(
-          "imagine-selected-element",
+          "imagine-selected-element"
         )
       ) {
         removeHoveredHighlight(selectorState.hoveredElement);
@@ -1125,7 +1134,7 @@
         selectorState.scrollTimeout = null;
         const elementUnderCursor = document.elementFromPoint(
           selectorState.mouseX,
-          selectorState.mouseY,
+          selectorState.mouseY
         );
         if (elementUnderCursor && selectorState.isActive) {
           const syntheticEvent = {
@@ -1147,7 +1156,7 @@
         selectorState.isActive &&
         event.target instanceof HTMLElement &&
         ["input", "textarea", "select"].includes(
-          event.target.tagName.toLowerCase(),
+          event.target.tagName.toLowerCase()
         )
       ) {
         event.preventDefault();
@@ -1234,22 +1243,22 @@
      * @returns NodeList of matching elements
      */
     function findElementsByLocation(
-      location: ElementLocation,
+      location: ElementLocation
     ): NodeListOf<HTMLElement> {
       const selector = `[data-imagine-id="${location.filePath}:${location.lineNumber}:${location.col || "0"}"]`;
       console.log(`Attempting to find elements with selector: ${selector}`);
       let elements = document.querySelectorAll<HTMLElement>(selector);
       console.log(
-        `Found ${elements.length} elements with selector: ${selector}`,
+        `Found ${elements.length} elements with selector: ${selector}`
       );
       if (elements.length > 0) return elements;
       const alternateSelector = `[data-component-path="${location.filePath}"][data-component-line="${location.lineNumber}"]`;
       console.log(
-        `Attempting to find elements with alternate selector: ${alternateSelector}`,
+        `Attempting to find elements with alternate selector: ${alternateSelector}`
       );
       elements = document.querySelectorAll<HTMLElement>(alternateSelector);
       console.log(
-        `Found ${elements.length} elements with alternate selector: ${alternateSelector}`,
+        `Found ${elements.length} elements with alternate selector: ${alternateSelector}`
       );
       return elements;
     }
@@ -1259,11 +1268,12 @@
      * @param event - The message event
      */
     function handleMessageEvent(event: MessageEvent): void {
+
       try {
         if (
           !event?.origin ||
           !event?.data?.type ||
-          !CONFIG.ALLOWED_ORIGINS.includes(event.origin)
+          !isWhitelistedOrigin(event.origin)
         )
           return;
         switch (event.data.type) {
@@ -1291,7 +1301,7 @@
                   });
                 document
                   .querySelectorAll(
-                    `[${CONFIG.HOVERED_ATTR}], [data-full-width]`,
+                    `[${CONFIG.HOVERED_ATTR}], [data-full-width]`
                   )
                   .forEach((element) => {
                     if (!element.hasAttribute(CONFIG.SELECTED_ATTR)) {
@@ -1313,7 +1323,7 @@
             }
             document
               .querySelectorAll(
-                `[${CONFIG.SELECTED_ATTR}], [${CONFIG.HOVERED_ATTR}]`,
+                `[${CONFIG.SELECTED_ATTR}], [${CONFIG.HOVERED_ATTR}]`
               )
               .forEach((element) => {
                 element.removeAttribute(CONFIG.SELECTED_ATTR);
@@ -1333,7 +1343,7 @@
                 element.setAttribute(CONFIG.SELECTED_ATTR, "true");
                 if (
                   Math.abs(
-                    element.getBoundingClientRect().width - window.innerWidth,
+                    element.getBoundingClientRect().width - window.innerWidth
                   ) < 5
                 ) {
                   element.setAttribute("data-full-width", "true");
@@ -1355,7 +1365,7 @@
               content: string;
             };
             console.log(
-              `Setting element content for ${id.filePath}:${id.lineNumber}:${id.col}`,
+              `Setting element content for ${id.filePath}:${id.lineNumber}:${id.col}`
             );
             findElementsByLocation({
               filePath: id.filePath,
@@ -1399,7 +1409,7 @@
           case "SET_STYLESHEET": {
             const { stylesheet } = event.data.payload as { stylesheet: string };
             let stylesheetElement = document.getElementById(
-              CONFIG.OVERRIDE_STYLESHEET_ID,
+              CONFIG.OVERRIDE_STYLESHEET_ID
             );
             if (stylesheetElement) {
               stylesheetElement.innerHTML = stylesheet;
@@ -1492,6 +1502,10 @@
           case "REQUEST_COMPONENT_TREE":
             sendComponentTree();
             break;
+          case "RELOAD_PAGE": {
+            window.location.reload();
+            break;
+          }
           default:
             console.warn("Unknown message type:", event.data.type);
         }
@@ -1548,21 +1562,21 @@
         event.stopPropagation();
         if (selectorState.hoveredElement) {
           const elementData = serializeElementData(
-            selectorState.hoveredElement,
+            selectorState.hoveredElement
           );
           selectorState.hoveredElement.setAttribute(
             CONFIG.SELECTED_ATTR,
-            "true",
+            "true"
           );
           if (
             Math.abs(
               selectorState.hoveredElement.getBoundingClientRect().width -
-                window.innerWidth,
+                window.innerWidth
             ) < 5
           ) {
             selectorState.hoveredElement.setAttribute(
               "data-full-width",
-              "true",
+              "true"
             );
           }
           sendMessageToAllowedOrigins({
@@ -1613,7 +1627,7 @@
           if (window.top) {
             window.top.postMessage(
               { type: "URL_CHANGED", url: document.location.href },
-              "*",
+              "*"
             );
           }
         }
@@ -1624,7 +1638,6 @@
     }
     window.addEventListener("load", onLoad);
   }
-
   /**
    * Main initialization function that sets up all functionality
    */
