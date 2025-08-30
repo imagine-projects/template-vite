@@ -46,7 +46,7 @@ export function AuthForm<T extends FieldValues>({
           </div>
         )}
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" size="sm" className="w-full" disabled={isLoading}>
           {isLoading ? loadingText : submitText}
         </Button>
       </form>

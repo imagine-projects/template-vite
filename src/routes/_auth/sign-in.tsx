@@ -89,15 +89,17 @@ function RouteComponent() {
         )}
       </AuthForm>
 
-      <div className="text-center text-sm text-muted-foreground mt-4">
-        Don't have an account?{" "}
-        <Link
-          to="/sign-up"
-          search={search.redirect ? { redirect: search.redirect } : undefined}
-          className="font-medium text-primary underline-offset-4 hover:underline"
-        >
-          Sign up
-        </Link>
+      <div className="text-center text-sm text-muted-foreground mt-4 space-x-1">
+        <div className="inline-block">Don't have an account? </div>
+        <div className="inline-block">
+          <Link
+            to="/sign-up"
+            search={search.redirect ? { redirect: search.redirect } : undefined}
+            className="font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Sign up
+          </Link>
+        </div>
       </div>
     </AuthCard>
   );

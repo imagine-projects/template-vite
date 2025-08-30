@@ -9,8 +9,8 @@ function Index() {
   const { user, signOut } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-grow flex flex-col justify-center items-center gap-4">
+    <div className="min-h-screen flex flex-col p-8">
+      <div className="flex-grow flex flex-col justify-center items-center gap-4 text-center">
         <h1 className="text-2xl">Welcome to your Imagine app!</h1>
 
         {user ? (

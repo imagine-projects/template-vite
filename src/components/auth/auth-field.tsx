@@ -30,11 +30,11 @@ export function AuthField<
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-sm md:text-base">{label}</FormLabel>
           <FormControl>
-            <Input type={type} placeholder={placeholder} {...field} />
+            <Input className="text-sm md:text-base h-8 md:h-9" type={type} placeholder={placeholder} {...field} />
           </FormControl>
-          <FormMessage />
+          <FormMessage className="text-xs md:text-sm" />
         </FormItem>
       )}
     />

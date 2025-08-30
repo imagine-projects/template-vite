@@ -6,6 +6,11 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 process.env.MODE = "preview";
 
+let count = 0;
+setInterval(() => {
+  console.log('hello', count++);
+}, 1000);
+
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
