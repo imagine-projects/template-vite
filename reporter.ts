@@ -1506,6 +1506,9 @@
             window.location.reload();
             break;
           }
+          case "CONSOLE_OUTPUT": {
+            break;
+          }
           default:
             console.warn("Unknown message type:", event.data.type);
         }
