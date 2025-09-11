@@ -23,7 +23,6 @@ export function App() {
   return <RouterProvider router={router} context={initialContext} />;
 }
 
-
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
