@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 import path from "path";
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 process.env.MODE = "preview";
 
@@ -17,11 +17,14 @@ export default defineConfig({
     host: "::",
     allowedHosts: true,
     port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
-    hmr: process.env.DISABLE_HMR === 'true' ? false : true,
+    hmr: process.env.DISABLE_HMR === "true" ? false : true,
   },
-  plugins: [tanstackRouter({
-    target: 'react',
-    autoCodeSplitting: true,
-  }), tailwindcss(), react()],
+  plugins: [
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+    }),
+    react(),
+    tailwindcss(),
+  ],
 });
-
