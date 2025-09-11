@@ -29,11 +29,9 @@ const createUserAccount = async (data: SignUpForm) => {
   const account = getAccountClient();
 
   try {
-    const result = await account.create(ID.unique(), data.email, data.password);
-    console.log("Sign up successful", result);
+    await account.create(ID.unique(), data.email, data.password);
   } catch (error) {
     if (error instanceof AppwriteException) {
-      console.error("Sign up error:", error.message);
       throw new Error(error.message);
     }
     throw error;
@@ -56,8 +54,7 @@ function RouteComponent() {
 
   const { mutate: signUp, isPending } = useMutation({
     mutationFn: createUserAccount,
-    onSuccess: (data) => {
-      console.log("Sign up successful:", data);
+    onSuccess: () => {
       // TODO: Redirect to dashboard or login page
     },
   });

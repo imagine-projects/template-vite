@@ -10,5 +10,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+      if (import.meta.env.VITE_INSTRUMENTATION_SCRIPT_SRC) {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = import.meta.env.VITE_INSTRUMENTATION_SCRIPT_SRC;
+        document.head.appendChild(script);
+      }
+    </script>
   </body>
 </html>

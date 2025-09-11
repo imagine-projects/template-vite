@@ -23,13 +23,6 @@ export function App() {
   return <RouterProvider router={router} context={initialContext} />;
 }
 
-// if (import.meta.env.VITE_INSTRUMENTATION_SCRIPT_SRC) {
-//   const script = document.createElement("script");
-//   script.type = "module";
-//   script.src = import.meta.env.VITE_INSTRUMENTATION_SCRIPT_SRC;
-//   document.head.appendChild(script);
-// }
-
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
