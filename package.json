@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b --noEmit",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "tsr generate && vite",
+    "build": "tsr generate && tsc -b && vite build",
+    "typecheck": "tsr generate && tsc -b --noEmit",
+    "lint": "tsr generate && eslint .",
+    "preview": "tsr generate && vite preview",
+    "generate:routes": "tsr generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -71,6 +72,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
+    "@tanstack/router-cli": "^1.131.44",
     "@tanstack/router-plugin": "^1.130.15",
     "@types/node": "^20.11.30",
     "@types/react": "^19.1.8",
