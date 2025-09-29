@@ -1,4 +1,4 @@
-import { Storage, ID, ImageGravity, ImageFormat, Permission } from 'appwrite';
+import { Storage, ID, ImageGravity, ImageFormat, Permission, Role } from 'appwrite';
 import { getAppwriteClient } from './index';
 
 // Bucket ID is always this per project convention
@@ -13,7 +13,7 @@ const storage = new Storage(client);
 
 export const files = {
     // Create/upload a file
-    upload: (file: File | Blob, name = 'upload', permissions?: Permission[]) => {
+    upload: (userId: string, file: File | Blob, name = 'upload', permissions?: Permission[]) => {
         const f =
             file instanceof File
                 ? file
@@ -22,7 +22,13 @@ export const files = {
             bucketId: BUCKET_ID,
             fileId: ID.unique(),
             file: f,
-            ...(permissions ? { permissions: (permissions || []).map((permission) => permission.toString()) } : {})
+            permissions: [
+                Permission.write(Role.user(userId)),
+                Permission.read(Role.user(userId)),
+                Permission.update(Role.user(userId)),
+                Permission.delete(Role.user(userId)),
+                ...(permissions ? permissions.map((permission) => permission.toString()) : [])
+            ]
         });
     },
 
